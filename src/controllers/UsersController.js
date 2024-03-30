@@ -7,7 +7,7 @@ class usersController {
   registration = async (req, res, next) => {
     try {
       const valid = userSchema.parse(req.body);
-      let haspass = bcrypt.hash(valid.password, saltRounds);
+      const haspass = await bcrypt.hash(valid.password, saltRounds);
       valid.password = haspass;
       const results = await UsersServices.registration(valid);
       return res.status(201).json({ status: true });
