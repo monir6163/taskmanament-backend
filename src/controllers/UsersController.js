@@ -1,6 +1,6 @@
 const userSchema = require("../../utility/validation");
 const UsersServices = require("../services/UsersServices");
-const bcrypt = require("bcrypt");
+// const bcrypt = require("bcrypt");
 
 class usersController {
   registration = async (req, res, next) => {
