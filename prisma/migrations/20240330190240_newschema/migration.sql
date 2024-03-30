@@ -1,8 +1,9 @@
 -- CreateTable
 CREATE TABLE "Users" (
     "id" SERIAL NOT NULL,
-    "email" TEXT NOT NULL,
-    "firstName" VARCHAR(30) NOT NULL,
+    "email" VARCHAR(255) NOT NULL,
+    "password" VARCHAR(255) NOT NULL,
+    "firstName" VARCHAR(20) NOT NULL,
     "lastName" VARCHAR(20) NOT NULL,
     "mobile" VARCHAR(11) NOT NULL,
     "photo" TEXT,

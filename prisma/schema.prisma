@@ -10,8 +10,9 @@ datasource db {
 
 model Users {
   id        Int      @id @default(autoincrement())
-  email     String   @unique
-  firstName String   @db.VarChar(30)
+  email     String   @unique @db.VarChar(255)
+  password  String   @db.VarChar(255)
+  firstName String   @db.VarChar(20)
   lastName  String   @db.VarChar(20)
   mobile    String   @db.VarChar(11)
   photo     String?
