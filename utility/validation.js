@@ -21,4 +21,9 @@ const userSchema = z.object({
   photo: z.union([z.literal(""), z.string().trim().url()]),
 });
 
-module.exports = userSchema;
+const loginSchema = z.object({
+  email: z.string().trim().email("invalid email"),
+  password: z.string().trim().min(8, "Min 8 character strong password"),
+});
+
+module.exports = { userSchema, loginSchema };
