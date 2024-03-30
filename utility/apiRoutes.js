@@ -1,6 +1,5 @@
 const userRoute = require("../src/routes/UserRoutes");
-const { Router } = require("express");
-const router = Router();
+const router = require("express").Router();
 
 const moduleRoutes = [
   {

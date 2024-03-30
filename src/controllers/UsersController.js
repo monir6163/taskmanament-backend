@@ -1,14 +1,13 @@
-const bcrypt = require("bcrypt");
-const saltRounds = 10;
 const userSchema = require("../../utility/validation");
 const UsersServices = require("../services/UsersServices");
+const bcrypt = require("bcrypt");
 
 class usersController {
   registration = async (req, res, next) => {
     try {
       const valid = userSchema.parse(req.body);
-      const haspass = await bcrypt.hash(valid.password, saltRounds);
-      valid.password = haspass;
+      const salt = await bcrypt.genSalt(10);
+      valid.password = await bcrypt.hash(valid.password, salt);
       const results = await UsersServices.registration(valid);
       return res.status(201).json({ status: true });
     } catch (error) {
