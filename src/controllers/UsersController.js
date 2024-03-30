@@ -1,13 +1,13 @@
 const userSchema = require("../../utility/validation");
 const UsersServices = require("../services/UsersServices");
-// const bcrypt = require("bcrypt");
+const bcrypt = require("bcrypt");
 
 class usersController {
   registration = async (req, res, next) => {
     try {
       const valid = userSchema.parse(req.body);
-      // let haspass = await bcrypt.hash(valid.password, 10);
-      // valid.password = haspass;
+      let haspass = await bcrypt.hash(valid.password, 10);
+      valid.password = haspass;
       const results = await UsersServices.registration(valid);
       return res.status(201).json({ status: true });
     } catch (error) {
