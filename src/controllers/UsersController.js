@@ -17,7 +17,7 @@ class usersController {
 
   getUser = async (req, res, next) => {
     try {
-      const results = await UsersServices.getUser();
+      const results = await UsersServices.getUsers();
       return res.status(200).json({ status: true, users: results });
     } catch (error) {
       next(error);

@@ -7,7 +7,7 @@ class userServices {
     });
   };
 
-  getUser = async () => {
+  getUsers = async () => {
     return prisma.users.findMany({
       orderBy: { createdAt: "desc" },
       select: {
