@@ -12,7 +12,7 @@ app.use(cors());
 const port = process.env.Port || 5000;
 
 app.get("/", (req, res) => {
-  res.send("TaskManagement server is up and running!");
+  res.send("TaskManagement server is  up and running!");
 });
 app.use("/api/v1", router);
 app.use(errorMiddleware);
