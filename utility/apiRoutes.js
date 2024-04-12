@@ -1,4 +1,5 @@
 const userRoute = require("../src/routes/UserRoutes");
+const taskRoute = require("../src/routes/TaskRoutes");
 const router = require("express").Router();
 
 const moduleRoutes = [
@@ -6,10 +7,10 @@ const moduleRoutes = [
     path: "/user",
     route: userRoute,
   },
-  // {
-  //   path: "/categories",
-  //   route: categoryRoutes,
-  // },
+  {
+    path: "/task",
+    route: taskRoute,
+  },
   // {
   //   path: "/products",
   //   route: productRoutes,

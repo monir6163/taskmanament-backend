@@ -18,4 +18,16 @@ model Users {
   photo     String?
   createdAt DateTime @default(now()) @db.Timestamp(0)
   updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(0)
+  Tasks     Tasks[]
+}
+
+model Tasks {
+  id          Int      @id @default(autoincrement())
+  title       String   @db.VarChar(255)
+  description String   @db.Text
+  status      String   @db.VarChar(20)
+  createdAt   DateTime @default(now()) @db.Timestamp(0)
+  updatedAt   DateTime @default(now()) @updatedAt @db.Timestamp(0)
+  userId      Int
+  user        Users    @relation(fields: [userId], references: [id])
 }

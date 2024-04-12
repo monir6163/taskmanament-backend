@@ -9,8 +9,8 @@ class middleware {
 
       if (token) {
         try {
-          const userInfo = await jwt.verify(token, process.env.JWT_SECRET);
-          req.userInfo = userInfo;
+          const user = await jwt.verify(token, process.env.JWT_SECRET);
+          req.user = user;
           next();
         } catch (error) {
           return res.status(401).json({ message: "Unauthorized" });

@@ -1,4 +1,8 @@
-const { userSchema, loginSchema } = require("../../utility/validation");
+const {
+  userSchema,
+  loginSchema,
+  updateUserSchema,
+} = require("../../utility/validation");
 const UsersServices = require("../services/UsersServices");
 const bcrypt = require("bcryptjs");
 
@@ -18,19 +22,35 @@ class usersController {
   login = async (req, res, next) => {
     try {
       const valid = loginSchema.parse(req.body);
-      const token = await UsersServices.login(valid);
-      return res
-        .status(200)
-        .json({ status: true, message: "Login Success", token: token });
+      const user = await UsersServices.login(valid);
+      return res.status(200).json({
+        status: true,
+        message: "Login Success",
+        token: user.token,
+        user: user.user,
+      });
     } catch (error) {
       next(error);
     }
   };
 
-  getUser = async (req, res, next) => {
+  updateUser = async (req, res, next) => {
     try {
-      const results = await UsersServices.getUser();
-      return res.status(200).json({ status: true, users: results });
+      const id = req.user.id;
+      req.body.id = id;
+      const valid = updateUserSchema.parse(req.body);
+      const results = await UsersServices.updateUser(valid);
+      return res.status(200).json({ status: true, message: "User Updated" });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  getAUser = async (req, res, next) => {
+    try {
+      const id = req.user.id;
+      const result = await UsersServices.getAUser(id);
+      return res.status(200).json({ status: true, data: result });
     } catch (error) {
       next(error);
     }

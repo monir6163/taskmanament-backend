@@ -2,11 +2,21 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const error = require("../middleware/error");
 class userServices {
   registration = async (data) => {
-    return prisma.users.create({
+    const existingUser = await prisma.users.findUnique({
+      where: {
+        email: data.email,
+      },
+    });
+    if (existingUser) {
+      throw error("User already exist", 409);
+    }
+    const result = await prisma.users.create({
       data: data,
     });
+    return result;
   };
 
   login = async (data) => {
@@ -16,11 +26,11 @@ class userServices {
       },
     });
     if (!existingUser) {
-      throw new Error("User not found");
+      throw error("User not found", 404);
     }
     const isMatch = await bcrypt.compare(data.password, existingUser.password);
     if (!isMatch) {
-      throw new Error("Invalid credentials");
+      throw error("Invalid credentials");
     }
     const payload = {
       id: existingUser.id,
@@ -33,22 +43,50 @@ class userServices {
       expiresIn: process.env.JWT_EXPIRE,
       issuer: process.env.JWT_ISSUER,
     });
-    return token;
+    return { token: token, user: payload };
   };
 
-  getUser = async () => {
-    return prisma.users.findMany({
-      orderBy: { createdAt: "desc" },
-      select: {
-        email: true,
-        firstName: true,
-        lastName: true,
-        mobile: true,
-        photo: true,
-        createdAt: true,
-        updatedAt: true,
+  updateUser = async (data) => {
+    const existingUser = await prisma.users.findUnique({
+      where: {
+        id: data.id,
       },
     });
+    if (!existingUser) {
+      throw error("User not found", 404);
+    }
+    const result = await prisma.users.update({
+      where: {
+        id: data.id,
+      },
+      data: {
+        firstName: data.firstName || existingUser.firstName,
+        lastName: data.lastName || existingUser.lastName,
+        mobile: data.mobile || existingUser.mobile,
+        photo: data.photo || existingUser.photo,
+      },
+    });
+    return result;
+  };
+
+  getAUser = async (id) => {
+    const result = await prisma.users.findUnique({
+      where: {
+        id: id,
+      },
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        email: true,
+        mobile: true,
+        photo: true,
+      },
+    });
+    if (!result) {
+      throw error("User not found", 404);
+    }
+    return result;
   };
 }
 
