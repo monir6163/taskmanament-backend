@@ -88,6 +88,34 @@ class userServices {
     }
     return result;
   };
+
+  updatePassword = async (data) => {
+    const existingUser = await prisma.users.findUnique({
+      where: {
+        id: data.id,
+      },
+    });
+    if (!existingUser) {
+      throw error("User not found", 404);
+    }
+    const isMatch = await bcrypt.compare(
+      data.oldPassword,
+      existingUser.password
+    );
+    if (!isMatch) {
+      throw error("Invalid credentials");
+    }
+    const hashedPassword = await bcrypt.hash(data.newPassword, 10);
+    const result = await prisma.users.update({
+      where: {
+        id: data.id,
+      },
+      data: {
+        password: hashedPassword,
+      },
+    });
+    return result;
+  };
 }
 
 module.exports = new userServices();

@@ -2,6 +2,7 @@ const {
   userSchema,
   loginSchema,
   updateUserSchema,
+  updatePasswordSchema,
 } = require("../../utility/validation");
 const UsersServices = require("../services/UsersServices");
 const bcrypt = require("bcryptjs");
@@ -51,6 +52,20 @@ class usersController {
       const id = req.user.id;
       const result = await UsersServices.getAUser(id);
       return res.status(200).json({ status: true, data: result });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  updatePassword = async (req, res, next) => {
+    try {
+      const id = req.user.id;
+      req.body.id = id;
+      const valid = updatePasswordSchema.parse(req.body);
+      const results = await UsersServices.updatePassword(valid);
+      return res
+        .status(200)
+        .json({ status: true, message: "Password Updated" });
     } catch (error) {
       next(error);
     }

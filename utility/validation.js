@@ -46,6 +46,12 @@ const updateUserSchema = z.object({
   photo: z.union([z.literal(""), z.string().trim().url()]),
 });
 
+const updatePasswordSchema = z.object({
+  id: z.number().int(),
+  oldPassword: z.string().trim().min(8, "Min 8 character strong password"),
+  newPassword: z.string().trim().min(8, "Min 8 character strong password"),
+});
+
 const taskSchema = z.object({
   userId: z.number().int(),
   title: z
@@ -61,4 +67,10 @@ const taskSchema = z.object({
   status: z.enum(["new", "progress", "completed", "canceled"]),
 });
 
-module.exports = { userSchema, loginSchema, updateUserSchema, taskSchema };
+module.exports = {
+  userSchema,
+  loginSchema,
+  updateUserSchema,
+  taskSchema,
+  updatePasswordSchema,
+};
