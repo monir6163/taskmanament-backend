@@ -24,12 +24,20 @@ class usersController {
     try {
       const valid = loginSchema.parse(req.body);
       const user = await UsersServices.login(valid);
-      return res.status(200).json({
-        status: true,
-        message: "Login Success",
-        token: user.token,
-        user: user.user,
-      });
+
+      return res
+        .status(200)
+        .cookie("token", user.token, {
+          httpOnly: true,
+          secure: true,
+          sameSite: "none",
+        })
+        .json({
+          status: true,
+          message: "Login Success",
+          token: user.token,
+          user: user.user,
+        });
     } catch (error) {
       next(error);
     }
